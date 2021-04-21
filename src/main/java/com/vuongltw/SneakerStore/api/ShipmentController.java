@@ -26,7 +26,7 @@ public class ShipmentController {
 	@Autowired
 	IShipmentService shipservice;
 	
-	@GetMapping("/allShipment")
+	@GetMapping("/allshipment")
 	public ResponseEntity<Iterable<ShipmentResponseDto>> getAllShipment(){
 		return new ResponseEntity<>(shipservice.findAll(),HttpStatus.OK);
 	}

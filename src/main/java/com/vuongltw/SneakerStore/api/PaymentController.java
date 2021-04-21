@@ -26,7 +26,7 @@ public class PaymentController {
 	@Autowired
 	IPaymentService payservice;
 	
-	@GetMapping("/allPayment")
+	@GetMapping("/allpayment")
 	public ResponseEntity<Iterable<PaymentResponseDto>> getAllPayment(){
 		return new ResponseEntity<>(payservice.findAll(),HttpStatus.OK);
 	}
