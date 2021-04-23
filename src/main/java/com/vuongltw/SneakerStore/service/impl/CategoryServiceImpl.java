@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vuongltw.SneakerStore.dto.CategoryDto;
-import com.vuongltw.SneakerStore.dto.responsedto.CategoryResponseDto;
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.entity.Category;
 import com.vuongltw.SneakerStore.mapper.ObjectMapperUtils;
 import com.vuongltw.SneakerStore.repository.ICategoryRepository;
@@ -20,25 +20,25 @@ public class CategoryServiceImpl implements ICategoryService {
 	
 
 	@Override
-	public Iterable<CategoryResponseDto> findAll() {
-		Iterable<CategoryResponseDto> list = ObjectMapperUtils.toDto(caterepo.findAll(), CategoryResponseDto.class);
+	public Iterable<CategoryDto> findAll() {
+		Iterable<CategoryDto> list = ObjectMapperUtils.toDto(caterepo.findAll(), CategoryDto.class);
 		return list;
 	}
 
 	@Override
-	public Optional<CategoryResponseDto> findById(Long id) {
+	public Optional<CategoryDto> findById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CategoryResponseDto save(CategoryDto t) {
+	public CategoryDto save(CategoryDto t) {
 		Category c = caterepo.save(ObjectMapperUtils.toEntity(t, Category.class));
-		return ObjectMapperUtils.toDto(c, CategoryResponseDto.class);
+		return ObjectMapperUtils.toDto(c, CategoryDto.class);
 	}
 
 	@Override
-	public boolean remove(Long id) {
+	public boolean remove(DeleteDto deletedto) {
 		return false;
 		// TODO Auto-generated method stub
 		

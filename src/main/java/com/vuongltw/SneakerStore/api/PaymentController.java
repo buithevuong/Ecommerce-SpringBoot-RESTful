@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.PaymentDto;
-import com.vuongltw.SneakerStore.dto.responsedto.PaymentResponseDto;
 import com.vuongltw.SneakerStore.service.IPaymentService;
 
 @RestController
@@ -27,31 +27,31 @@ public class PaymentController {
 	IPaymentService payservice;
 	
 	@GetMapping("/allpayment")
-	public ResponseEntity<Iterable<PaymentResponseDto>> getAllPayment(){
+	public ResponseEntity<Iterable<PaymentDto>> getAllPayment(){
 		return new ResponseEntity<>(payservice.findAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PaymentResponseDto> getPayment(@PathVariable("id") Long id){
+	public ResponseEntity<PaymentDto> getPayment(@PathVariable("id") Long id){
 		return new ResponseEntity<>(payservice.findById(id).get(),HttpStatus.OK);
 		
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<PaymentResponseDto> createPayment(@RequestBody PaymentDto paymentresdto){
+	public ResponseEntity<PaymentDto> createPayment(@RequestBody PaymentDto paymentresdto){
 		return new ResponseEntity<>(payservice.save(paymentresdto),HttpStatus.OK);
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<PaymentResponseDto> editPayment(@RequestBody PaymentDto paymentresdto){
+	public ResponseEntity<PaymentDto> editPayment(@RequestBody PaymentDto paymentresdto){
 		return new ResponseEntity<>(payservice.save(paymentresdto),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<PaymentResponseDto> removePayment(@PathVariable("id") Long id) {
-		Optional<PaymentResponseDto> payment = payservice.findById(id);
+	@DeleteMapping("")
+	public ResponseEntity<PaymentDto> removePayment(@RequestBody DeleteDto deletedto) {
+		Optional<PaymentDto> payment = payservice.findById(deletedto.getId());
 		
-		if(payservice.remove(id) == true) {
+		if(payservice.remove(deletedto) == true) {
 			return new ResponseEntity<>(payment.get(),HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

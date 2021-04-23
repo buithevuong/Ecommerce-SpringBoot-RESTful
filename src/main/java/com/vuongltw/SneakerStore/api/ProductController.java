@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.PageDto;
 import com.vuongltw.SneakerStore.dto.ProductDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ProductResponseDto;
 import com.vuongltw.SneakerStore.service.IProductService;
 
 @RestController
@@ -31,42 +31,43 @@ public class ProductController {
 	}
 	
 	@GetMapping("/allproduct")
-	public ResponseEntity<Iterable<ProductResponseDto>> getAllProduct(){
+	public ResponseEntity<Iterable<ProductDto>> getAllProduct(){
 		return new ResponseEntity<>(proservice.findAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/allproductbypage")
-	public ResponseEntity<List<ProductResponseDto>> getProducts(@RequestBody PageDto pagedto){
+	public ResponseEntity<List<ProductDto>> getProducts(@RequestBody PageDto pagedto){
 		System.out.println("offset:"+pagedto.getOffset()+" limit:"+pagedto.getLimit());
 		return new ResponseEntity<>(proservice.listAll(pagedto),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductResponseDto> getProduct(@PathVariable("id") Long id){
+	public ResponseEntity<ProductDto> getProduct(@PathVariable("id") Long id){
 		return new ResponseEntity<>(proservice.findById(id).get(),HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/name/{keyword}")
-	public ResponseEntity<Iterable<ProductResponseDto>> searchProduct(@PathVariable("keyword") String keyword){
+	public ResponseEntity<Iterable<ProductDto>> searchProduct(@PathVariable("keyword") String keyword){
 		return new ResponseEntity<>(proservice.findByProductName(keyword),HttpStatus.OK);
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductDto productresdto){
+	public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productresdto){
 		return new ResponseEntity<>(proservice.save(productresdto),HttpStatus.OK);
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<ProductResponseDto> editProduct(@RequestBody ProductDto productresdto){
+	public ResponseEntity<ProductDto> editProduct(@RequestBody ProductDto productresdto){
 		return new ResponseEntity<>(proservice.save(productresdto),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<ProductResponseDto> removeProduct(@PathVariable("id") Long id) {
-		Optional<ProductResponseDto> product = proservice.findById(id);
+	@DeleteMapping("")
+	public ResponseEntity<ProductDto> removeProduct(@RequestBody DeleteDto deletedto) {
+		Optional<ProductDto> product = proservice.findById(deletedto.getId());
 		
-		if(proservice.remove(id) == true) {
+		
+		if(proservice.remove(deletedto) == true) {
 			return new ResponseEntity<>(product.get(),HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

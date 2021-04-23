@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vuongltw.SneakerStore.dto.CartDto;
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.ItemDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ItemResponseDto;
 import com.vuongltw.SneakerStore.service.IItemService;
 
 @RestController
@@ -28,38 +28,37 @@ public class ItemController {
 	IItemService itemservice;
 
 	@GetMapping("/allitem")
-	public ResponseEntity<Iterable<ItemResponseDto>> getAllItem() {
+	public ResponseEntity<Iterable<ItemDto>> getAllItem() {
 		return new ResponseEntity<>(itemservice.findAll(), HttpStatus.OK);
 	}
 
 	
 	@GetMapping("/allitembycart")
-	public ResponseEntity<Iterable<ItemResponseDto>> getAllItemByCartid(@RequestBody CartDto cartdto) {
+	public ResponseEntity<Iterable<ItemDto>> getAllItemByCartid(@RequestBody CartDto cartdto) {
 		return new ResponseEntity<>(itemservice.findAllByCart(cartdto), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ItemResponseDto> getItem(@PathVariable("id") Long id) {
+	public ResponseEntity<ItemDto> getItem(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(itemservice.findById(id).get(), HttpStatus.OK);
 
 	}
 
-	@PostMapping(value = "",consumes = {"application/json"},
-			produces = {"application/json"})
-	public ResponseEntity<ItemResponseDto> createItem(@RequestBody ItemDto Itemresdto) {
+	@PostMapping(value = "")
+	public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto Itemresdto) {
 		return new ResponseEntity<>(itemservice.save(Itemresdto), HttpStatus.OK);
 	}
 
 	@PutMapping("")
-	public ResponseEntity<ItemResponseDto> editItem(@RequestBody ItemDto Itemresdto) {
+	public ResponseEntity<ItemDto> editItem(@RequestBody ItemDto Itemresdto) {
 		return new ResponseEntity<>(itemservice.save(Itemresdto), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<ItemResponseDto> removeItem(@PathVariable("id") Long id) {
-		Optional<ItemResponseDto> Item = itemservice.findById(id);
+	@DeleteMapping("")
+	public ResponseEntity<ItemDto> removeItem(@RequestBody DeleteDto deletedto) {
+		Optional<ItemDto> Item = itemservice.findById(deletedto.getId());
 
-		if (itemservice.remove(id) == true) {
+		if (itemservice.remove(deletedto) == true) {
 			return new ResponseEntity<>(Item.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.OrderDto;
 import com.vuongltw.SneakerStore.dto.PageDto;
-import com.vuongltw.SneakerStore.dto.responsedto.OrderResponseDto;
 import com.vuongltw.SneakerStore.service.IOrderService;
 
 
@@ -32,36 +32,36 @@ public class OrderController {
 	
 
 	@GetMapping("/allorder")
-	public ResponseEntity<Iterable<OrderResponseDto>> getAllOrder() {
+	public ResponseEntity<Iterable<OrderDto>> getAllOrder() {
 		return new ResponseEntity<>(orderservice.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/allorderbypage")
-	public ResponseEntity<List<OrderResponseDto>> getOrders(@RequestBody PageDto pagedto){
+	public ResponseEntity<List<OrderDto>> getOrders(@RequestBody PageDto pagedto){
 		return new ResponseEntity<>(orderservice.listAllWithPage(pagedto),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<OrderResponseDto> getOrder(@PathVariable("id") Long id) {
+	public ResponseEntity<OrderDto> getOrder(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(orderservice.findById(id).get(), HttpStatus.OK);
 
 	}
 
 	@PostMapping("")
-	public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderDto Orderresdto) {
+	public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto Orderresdto) {
 		return new ResponseEntity<>(orderservice.save(Orderresdto), HttpStatus.OK);
 	}
 
 	@PutMapping("")
-	public ResponseEntity<OrderResponseDto> editOrder(@RequestBody OrderDto Orderresdto) {
+	public ResponseEntity<OrderDto> editOrder(@RequestBody OrderDto Orderresdto) {
 		return new ResponseEntity<>(orderservice.save(Orderresdto), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<OrderResponseDto> removeOrder(@PathVariable("id") Long id) {
-		Optional<OrderResponseDto> order = orderservice.findById(id);
+	@DeleteMapping("")
+	public ResponseEntity<OrderDto> removeOrder(@RequestBody DeleteDto deletedto) {
+		Optional<OrderDto> order = orderservice.findById(deletedto.getId());
 		
-		if (orderservice.remove(id) == true) {
+		if (orderservice.remove(deletedto) == true) {
 			return new ResponseEntity<>(order.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

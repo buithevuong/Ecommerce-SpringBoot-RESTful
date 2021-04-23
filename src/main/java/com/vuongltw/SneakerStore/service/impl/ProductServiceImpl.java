@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.PageDto;
 import com.vuongltw.SneakerStore.dto.ProductDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ProductResponseDto;
 import com.vuongltw.SneakerStore.entity.Product;
 import com.vuongltw.SneakerStore.mapper.ObjectMapperUtils;
 import com.vuongltw.SneakerStore.repository.IProductRepository;
@@ -24,42 +24,42 @@ public class ProductServiceImpl implements IProductService {
 	IProductRepository prorepo;
 
 	@Override
-	public Iterable<ProductResponseDto> findAll() {
-		Iterable<ProductResponseDto> list = ObjectMapperUtils.toDto(prorepo.findAll(), ProductResponseDto.class);
+	public Iterable<ProductDto> findAll() {
+		Iterable<ProductDto> list = ObjectMapperUtils.toDto(prorepo.findAll(), ProductDto.class);
 		return list;
 	}
 
 	@Override
-	public List<ProductResponseDto> listAll(PageDto pagedto) {
+	public List<ProductDto> listAll(PageDto pagedto) {
 		Pageable pageable = PageRequest.of(pagedto.getOffset(), pagedto.getLimit(), Sort.by("productName") );
 		
 		Page<Product> productPage = prorepo.getAllProduct(pageable);
 		System.out.println(productPage);
-		List<ProductResponseDto> list = customizePage(productPage);
+		List<ProductDto> list = customizePage(productPage);
 		System.out.println(list);
 		return list;
 	}
 	
 	@Override
-	public Optional<ProductResponseDto> findById(Long id) {
+	public Optional<ProductDto> findById(Long id) {
 		if(id == null) {
 			return null;
 		}else {
-			Optional<ProductResponseDto> productOptinal = Optional
-					.of(ObjectMapperUtils.toDto(prorepo.findByProductid(id), ProductResponseDto.class));
+			Optional<ProductDto> productOptinal = Optional
+					.of(ObjectMapperUtils.toDto(prorepo.findByProductid(id), ProductDto.class));
 			return productOptinal;
 		}
 		
 	}
 
-	public Iterable<ProductResponseDto> findByProductName(String keyword) {
+	public Iterable<ProductDto> findByProductName(String keyword) {
 		List<Product> product =  prorepo.findByProductName(keyword);
 		if(keyword == null) {
 			return null;
 		} else if(product == null) {
 			return null;
 		}else {
-			Iterable<ProductResponseDto> list = ObjectMapperUtils.toDto(product, ProductResponseDto.class);
+			Iterable<ProductDto> list = ObjectMapperUtils.toDto(product, ProductDto.class);
 			return list;
 		}
 	
@@ -67,20 +67,20 @@ public class ProductServiceImpl implements IProductService {
 
 	
 	@Override
-	public ProductResponseDto save(ProductDto t) {
+	public ProductDto save(ProductDto t) {
 		if( t == null) {
 			return null;
 		} else {
 			Product p = prorepo.save(ObjectMapperUtils.toEntity(t, Product.class));
-			return ObjectMapperUtils.toDto(p, ProductResponseDto.class);
+			return ObjectMapperUtils.toDto(p, ProductDto.class);
 		}
 		
 	}
 
 	@Override
-	public boolean remove(Long id) {
-		if (prorepo.findByProductid(id) != null) {
-			prorepo.deleteById(id);
+	public boolean remove(DeleteDto deletedto) {
+		if (prorepo.findByProductid(deletedto.getId()) != null) {
+			prorepo.deleteById(deletedto.getId());
 			return true;
 		}
 
@@ -88,10 +88,10 @@ public class ProductServiceImpl implements IProductService {
 
 	}
 
-	private List<ProductResponseDto> customizePage(Page<Product> page) {
+	private List<ProductDto> customizePage(Page<Product> page) {
 		List<Product> listproduct = page.getContent();
-		List<ProductResponseDto> productResponseDto = ObjectMapperUtils.toDto(listproduct, ProductResponseDto.class);
-		return productResponseDto;
+		List<ProductDto> productDto = ObjectMapperUtils.toDto(listproduct, ProductDto.class);
+		return productDto;
 	}
 
 }

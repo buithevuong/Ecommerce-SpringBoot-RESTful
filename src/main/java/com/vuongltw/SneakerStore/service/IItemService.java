@@ -2,9 +2,8 @@ package com.vuongltw.SneakerStore.service;
 
 import com.vuongltw.SneakerStore.dto.CartDto;
 import com.vuongltw.SneakerStore.dto.ItemDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ItemResponseDto;
 
-public interface IItemService extends IGeneralService<ItemResponseDto , ItemDto>{
+public interface IItemService extends IGeneralService<ItemDto>{
 
-	Iterable<ItemResponseDto> findAllByCart(CartDto cartdto);
+	Iterable<ItemDto> findAllByCart(CartDto cartdto);
 }

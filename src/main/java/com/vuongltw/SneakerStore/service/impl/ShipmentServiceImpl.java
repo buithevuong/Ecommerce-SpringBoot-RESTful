@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.ShipmentDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ShipmentResponseDto;
 import com.vuongltw.SneakerStore.entity.Shipment;
 import com.vuongltw.SneakerStore.mapper.ObjectMapperUtils;
 import com.vuongltw.SneakerStore.repository.IShipmentRepository;
@@ -18,36 +18,36 @@ public class ShipmentServiceImpl implements IShipmentService{
 	IShipmentRepository shiprepo;
 	
 	@Override
-	public Iterable<ShipmentResponseDto> findAll() {
-		Iterable<ShipmentResponseDto> list = ObjectMapperUtils.toDto(shiprepo.findAll(), ShipmentResponseDto.class);
+	public Iterable<ShipmentDto> findAll() {
+		Iterable<ShipmentDto> list = ObjectMapperUtils.toDto(shiprepo.findAll(), ShipmentDto.class);
 		return list;
 	}
 
 	@Override
-	public Optional<ShipmentResponseDto> findById(Long id) {
+	public Optional<ShipmentDto> findById(Long id) {
 		if(id == null) {
 			return null;
 		}else {
-			Optional<ShipmentResponseDto> ShipmentOptinal = Optional
-					.of(ObjectMapperUtils.toDto(shiprepo.findByShipmentid(id), ShipmentResponseDto.class));
+			Optional<ShipmentDto> ShipmentOptinal = Optional
+					.of(ObjectMapperUtils.toDto(shiprepo.findByShipmentid(id), ShipmentDto.class));
 			return ShipmentOptinal;
 		}
 	}
 
 	@Override
-	public ShipmentResponseDto save(ShipmentDto t) {
+	public ShipmentDto save(ShipmentDto t) {
 		if( t == null) {
 			return null;
 		} else {
 			Shipment p = shiprepo.save(ObjectMapperUtils.toEntity(t, Shipment.class));
-			return ObjectMapperUtils.toDto(p, ShipmentResponseDto.class);
+			return ObjectMapperUtils.toDto(p, ShipmentDto.class);
 		}
 	}
 
 	@Override
-	public boolean remove(Long id) {
-		if (shiprepo.findByShipmentid(id) != null) {
-			shiprepo.deleteById(id);
+	public boolean remove(DeleteDto deletedto) {
+		if (shiprepo.findByShipmentid(deletedto.getId()) != null) {
+			shiprepo.deleteById(deletedto.getId());
 			return true;
 		}
 

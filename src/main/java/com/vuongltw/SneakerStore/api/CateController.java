@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vuongltw.SneakerStore.dto.CategoryDto;
-import com.vuongltw.SneakerStore.dto.responsedto.CategoryResponseDto;
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.service.ICategoryService;
 
 @RestController
@@ -28,31 +28,31 @@ public class CateController {
 	ICategoryService cateservice;
 	
 	@GetMapping("/allcategory")
-	public ResponseEntity<Iterable<CategoryResponseDto>> getAllCategory(){
+	public ResponseEntity<Iterable<CategoryDto>> getAllCategory(){
 		return new ResponseEntity<>(cateservice.findAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable("id") Long id){
+	public ResponseEntity<CategoryDto> getCategory(@PathVariable("id") Long id){
 		return new ResponseEntity<>(cateservice.findById(id).get(),HttpStatus.OK);
 		
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<CategoryResponseDto> createCategory(@RequestBody CategoryDto Categoryresdto){
+	public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto Categoryresdto){
 		return new ResponseEntity<>(cateservice.save(Categoryresdto),HttpStatus.OK);
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<CategoryResponseDto> editCategory(@RequestBody CategoryDto Categoryresdto){
+	public ResponseEntity<CategoryDto> editCategory(@RequestBody CategoryDto Categoryresdto){
 		return new ResponseEntity<>(cateservice.save(Categoryresdto),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<CategoryResponseDto> removeCategory(@PathVariable("id") Long id) {
-		Optional<CategoryResponseDto> Category = cateservice.findById(id);
+	@DeleteMapping("")
+	public ResponseEntity<CategoryDto> removeCategory(@RequestBody DeleteDto deletedto) {
+		Optional<CategoryDto> Category = cateservice.findById(deletedto.getId());
 		
-		if(cateservice.remove(id) == true) {
+		if(cateservice.remove(deletedto) == true) {
 			return new ResponseEntity<>(Category.get(),HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -12,12 +12,10 @@ public class ItemResponseDto {
 	
 	private String image;
 	
-	private String type;
-	
-	private String color;
+	private int quantity;
 	
 	private float price;
 	
-	private int size;
+	
 	
 }

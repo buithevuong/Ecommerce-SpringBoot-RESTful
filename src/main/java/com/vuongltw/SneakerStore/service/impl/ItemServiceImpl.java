@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vuongltw.SneakerStore.dto.CartDto;
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.ItemDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ItemResponseDto;
 import com.vuongltw.SneakerStore.entity.Cart;
 import com.vuongltw.SneakerStore.entity.Item;
 import com.vuongltw.SneakerStore.mapper.ObjectMapperUtils;
@@ -24,38 +24,45 @@ public class ItemServiceImpl implements IItemService {
 	ICartRepository cartrepo;
 	
 	@Override
-	public Iterable<ItemResponseDto> findAll() {
-		Iterable<ItemResponseDto> list = ObjectMapperUtils.toDto(itemrepo.findAll(), ItemResponseDto.class);
+	public Iterable<ItemDto> findAll() {
+		Iterable<ItemDto> list = ObjectMapperUtils.toDto(itemrepo.findAll(), ItemDto.class);
 		return list;
 	}
 	
 	@Override
-	public Iterable<ItemResponseDto> findAllByCart(CartDto cartdto) {
+	public Iterable<ItemDto> findAllByCart(CartDto cartdto) {
 		
-		Iterable<ItemResponseDto> list = ObjectMapperUtils.toDto(itemrepo.findAllByCartid(cartdto.getCartid()), ItemResponseDto.class);
+		Iterable<ItemDto> list = ObjectMapperUtils.toDto(itemrepo.findAllByCartid(cartdto.getCartid()), ItemDto.class);
 		return list;
 	}
 
 	@Override
-	public Optional<ItemResponseDto> findById(Long id) {
-		Optional<ItemResponseDto> itemOptinal = Optional
-				.of(ObjectMapperUtils.toDto(itemrepo.findByItemid(id), ItemResponseDto.class));
+	public Optional<ItemDto> findById(Long id) {
+		Optional<ItemDto> itemOptinal = Optional
+				.of(ObjectMapperUtils.toDto(itemrepo.findByItemid(id), ItemDto.class));
 		return itemOptinal;
 	}
 
 	@Override
-	public ItemResponseDto save(ItemDto t) {
+	public ItemDto save(ItemDto t) {
 		Cart cart = cartrepo.findByCartid(t.getCart_id());
 		Item i = ObjectMapperUtils.toEntity(t, Item.class);
 		i.setCart(cart);
 		itemrepo.save(i);
-		return ObjectMapperUtils.toDto(i, ItemResponseDto.class);
+		boolean check = true;
+		cartrepo.save(updateCart(cart, i , check));
+		return ObjectMapperUtils.toDto(i, ItemDto.class);
 	}
 
 	@Override
-	public boolean remove(Long id) {
-		if (itemrepo.findByItemid(id) != null) {
-			itemrepo.deleteById(id);
+	public boolean remove(DeleteDto deletedto) {
+		Item i = itemrepo.findByItemid(deletedto.getId());
+		if (i != null) {
+			boolean check = false;
+			Cart cart = cartrepo.findByCartid(i.getCart().getCartid());
+			
+			itemrepo.deleteById(deletedto.getId());
+			cartrepo.save(updateCart(cart, i, check));
 			return true;
 		}
 
@@ -64,5 +71,18 @@ public class ItemServiceImpl implements IItemService {
 	}
 
 	
-
+	public Cart updateCart(Cart cart , Item i , boolean check) {
+		if(check == true) {
+			float newSubtotal = cart.getSubtotal()+i.getPrice();
+			cart.setSubtotal(newSubtotal);
+			return cart;
+		}
+		else {
+			float newSubtotal = cart.getSubtotal()-i.getPrice();
+			cart.setSubtotal(newSubtotal);
+			return cart;
+		}
+	}
+	
+	
 }

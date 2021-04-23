@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.ShipmentDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ShipmentResponseDto;
 import com.vuongltw.SneakerStore.service.IShipmentService;
 
 @RestController
@@ -27,31 +27,31 @@ public class ShipmentController {
 	IShipmentService shipservice;
 	
 	@GetMapping("/allshipment")
-	public ResponseEntity<Iterable<ShipmentResponseDto>> getAllShipment(){
+	public ResponseEntity<Iterable<ShipmentDto>> getAllShipment(){
 		return new ResponseEntity<>(shipservice.findAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ShipmentResponseDto> getShipment(@PathVariable("id") Long id){
+	public ResponseEntity<ShipmentDto> getShipment(@PathVariable("id") Long id){
 		return new ResponseEntity<>(shipservice.findById(id).get(),HttpStatus.OK);
 		
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<ShipmentResponseDto> createShipment(@RequestBody ShipmentDto shipmentresdto){
+	public ResponseEntity<ShipmentDto> createShipment(@RequestBody ShipmentDto shipmentresdto){
 		return new ResponseEntity<>(shipservice.save(shipmentresdto),HttpStatus.OK);
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<ShipmentResponseDto> editShipment(@RequestBody ShipmentDto shipmentresdto){
+	public ResponseEntity<ShipmentDto> editShipment(@RequestBody ShipmentDto shipmentresdto){
 		return new ResponseEntity<>(shipservice.save(shipmentresdto),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<ShipmentResponseDto> removeShipment(@PathVariable("id") Long id) {
-		Optional<ShipmentResponseDto> shipment = shipservice.findById(id);
+	@DeleteMapping("")
+	public ResponseEntity<ShipmentDto> removeShipment(@RequestBody DeleteDto deletedto) {
+		Optional<ShipmentDto> shipment = shipservice.findById(deletedto.getId());
 		
-		if(shipservice.remove(id) == true) {
+		if(shipservice.remove(deletedto) == true) {
 			return new ResponseEntity<>(shipment.get(),HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);

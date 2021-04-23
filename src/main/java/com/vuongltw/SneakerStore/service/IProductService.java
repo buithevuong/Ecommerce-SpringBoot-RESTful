@@ -4,11 +4,10 @@ import java.util.List;
 
 import com.vuongltw.SneakerStore.dto.PageDto;
 import com.vuongltw.SneakerStore.dto.ProductDto;
-import com.vuongltw.SneakerStore.dto.responsedto.ProductResponseDto;
 
-public interface IProductService extends IGeneralService<ProductResponseDto , ProductDto>{
+public interface IProductService extends IGeneralService<ProductDto>{
 	
-	Iterable<ProductResponseDto> findByProductName(String keyword);
+	Iterable<ProductDto> findByProductName(String keyword);
 	
-	List<ProductResponseDto> listAll(PageDto pagedto);
+	List<ProductDto> listAll(PageDto pagedto);
 }

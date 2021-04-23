@@ -2,12 +2,14 @@ package com.vuongltw.SneakerStore.service;
 
 import java.util.Optional;
 
-public interface IGeneralService<T , I> {
+import com.vuongltw.SneakerStore.dto.DeleteDto;
+
+public interface IGeneralService<T> {
 	Iterable<T> findAll();
 
     Optional<T> findById(Long id);
 
-    T save(I t);
+    T save(T t);
 
-    boolean remove(Long id);
+    boolean remove(DeleteDto deletedto);
 }
