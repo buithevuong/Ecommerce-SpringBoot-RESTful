@@ -12,4 +12,6 @@ public interface IGeneralService<T> {
     T save(T t);
 
     boolean remove(DeleteDto deletedto);
+
+	
 }

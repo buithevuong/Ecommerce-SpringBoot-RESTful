@@ -12,14 +12,29 @@ import org.springframework.stereotype.Service;
 import com.vuongltw.SneakerStore.dto.DeleteDto;
 import com.vuongltw.SneakerStore.dto.OrderDto;
 import com.vuongltw.SneakerStore.dto.PageDto;
+import com.vuongltw.SneakerStore.entity.Cart;
 import com.vuongltw.SneakerStore.entity.Order;
+import com.vuongltw.SneakerStore.entity.Payment;
+import com.vuongltw.SneakerStore.entity.Shipment;
 import com.vuongltw.SneakerStore.mapper.ObjectMapperUtils;
+import com.vuongltw.SneakerStore.repository.ICartRepository;
 import com.vuongltw.SneakerStore.repository.IOrderRepository;
+import com.vuongltw.SneakerStore.repository.IPaymentRepository;
+import com.vuongltw.SneakerStore.repository.IShipmentRepository;
 import com.vuongltw.SneakerStore.service.IOrderService;
 @Service
 public class OrderServiceImpl implements IOrderService {
 	@Autowired
 	IOrderRepository orderrepo;
+	
+	@Autowired
+	ICartRepository cartrepo;
+	
+	@Autowired
+	IShipmentRepository shiprepo;
+	
+	@Autowired
+	IPaymentRepository payrepo;
 
 	@Override
 	public Iterable<OrderDto> findAll() {
@@ -41,11 +56,20 @@ public class OrderServiceImpl implements IOrderService {
 				.of(ObjectMapperUtils.toDto(orderrepo.findByOrderid(id), OrderDto.class));
 		return OrderOptinal;
 	}
-
+	
 	@Override
 	public OrderDto save(OrderDto t) {
-		Order o = orderrepo.save(ObjectMapperUtils.toEntity(t, Order.class));
-		return ObjectMapperUtils.toDto(o, OrderDto.class);
+		Cart cart = cartrepo.findByCartid(t.getCart_id());
+		Shipment ship = shiprepo.findByShipmentid(t.getShipment_id());
+		Payment pay = payrepo.findByPaymentid(t.getPayment_id());
+		Order o = ObjectMapperUtils.toEntity(t, Order.class);
+		o.setCart(cart);
+		o.setPayment(pay);
+		o.setShipment(ship);
+		o.setSubtotal(cart.getSubtotal());
+		o.setTotalprice(cart.getSubtotal()+ship.getPrice()+pay.getPrice());
+		orderrepo.save(o);
+		return t;
 	}
 
 	@Override

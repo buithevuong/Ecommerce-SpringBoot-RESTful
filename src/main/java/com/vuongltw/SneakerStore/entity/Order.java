@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -43,4 +44,7 @@ public class Order {
 	@Column
 	private float totalprice;
 
+	@ManyToOne(targetEntity = UserEntity.class)
+	@JoinColumn(name = "user_id" , nullable = false, referencedColumnName = "userid" , insertable = true , updatable = true)
+	private UserEntity user;
 }

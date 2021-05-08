@@ -1,7 +1,5 @@
 package com.vuongltw.SneakerStore.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +14,10 @@ public class UserDto {
 	private String username;
 	
 	private String email;
-	@JsonIgnore
+	
 	private String password;
+	
+	private Integer active;
+	
+	private String role;
 }

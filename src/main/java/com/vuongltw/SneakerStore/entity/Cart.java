@@ -9,7 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +35,10 @@ public class Cart {
 	@ToString.Exclude
 	private List<Item> listItem;
 	
+	
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false, referencedColumnName = "userid", insertable = true, updatable = true)
+	private UserEntity user;
 	
 	@Column
 	private float subtotal;

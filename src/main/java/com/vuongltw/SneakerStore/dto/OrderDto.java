@@ -15,4 +15,10 @@ public class OrderDto extends OrderResponseDto {
 	private Long orderid;
 	
 	private Integer status;
+	
+	private Long shipment_id;
+	
+	private Long payment_id;
+	
+	private Long cart_id;
 }

@@ -33,7 +33,7 @@ public class ItemController {
 	}
 
 	
-	@GetMapping("/allitembycart")
+	@PostMapping("/allitembycart")
 	public ResponseEntity<Iterable<ItemDto>> getAllItemByCartid(@RequestBody CartDto cartdto) {
 		return new ResponseEntity<>(itemservice.findAllByCart(cartdto), HttpStatus.OK);
 	}

@@ -13,4 +13,12 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class CartDto extends CartResponseDto {
 	private Long cartid;
+	
+	private Long user_id;
+
+	public CartDto( Long user_id) {
+		
+		this.user_id = user_id;
+	}
+	
 }
