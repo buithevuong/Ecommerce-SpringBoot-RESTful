@@ -10,4 +10,7 @@ public interface IProductService extends IGeneralService<ProductDto>{
 	Iterable<ProductDto> findByProductName(String keyword);
 	
 	List<ProductDto> listAll(PageDto pagedto);
+	
+	
+	public Iterable<ProductDto> findByType(String type);
 }

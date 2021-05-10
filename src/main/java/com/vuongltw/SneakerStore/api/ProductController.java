@@ -52,6 +52,12 @@ public class ProductController {
 		return new ResponseEntity<>(proservice.findByProductName(keyword),HttpStatus.OK);
 	}
 	
+	@GetMapping("/type/{type}")
+	public ResponseEntity<Iterable<ProductDto>> searchProductByType(@PathVariable("type") String type){
+		
+		return new ResponseEntity<>(proservice.findByType(type),HttpStatus.OK);
+	}
+	
 	@PostMapping("")
 	public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productresdto){
 		return new ResponseEntity<>(proservice.save(productresdto),HttpStatus.OK);

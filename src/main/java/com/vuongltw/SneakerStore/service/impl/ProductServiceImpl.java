@@ -54,12 +54,14 @@ public class ProductServiceImpl implements IProductService {
 
 	public Iterable<ProductDto> findByProductName(String keyword) {
 		List<Product> product =  prorepo.findByProductName(keyword);
+		System.out.println(keyword +"000000000 " +product);
 		if(keyword == null) {
 			return null;
 		} else if(product == null) {
 			return null;
 		}else {
 			Iterable<ProductDto> list = ObjectMapperUtils.toDto(product, ProductDto.class);
+			System.out.println(list);
 			return list;
 		}
 	
@@ -92,6 +94,23 @@ public class ProductServiceImpl implements IProductService {
 		List<Product> listproduct = page.getContent();
 		List<ProductDto> productDto = ObjectMapperUtils.toDto(listproduct, ProductDto.class);
 		return productDto;
+	}
+
+	@Override
+	public Iterable<ProductDto> findByType(String type) {
+		
+		List<Product> product =  prorepo.findByType(type);
+		System.out.println(type + "-------------------"+product);
+		if(type == null) {
+			return null;
+		} else if(product == null) {
+			
+			return null;
+		}else {
+			Iterable<ProductDto> list = ObjectMapperUtils.toDto(product, ProductDto.class);
+			System.out.println(list);
+			return list;
+		}
 	}
 
 }
